@@ -3,7 +3,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 // Cena e câmera
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xffffff);
+
+scene.background = new THREE.Color(0x000000);
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
 camera.position.z = 5;
@@ -35,9 +36,9 @@ const edges = [
   [0, 4], [1, 5], [2, 6], [3, 7],
 ];
 
-const materialColorLine = new THREE.LineBasicMaterial({ color: 0x0000ff });
+const materialColorLine = new THREE.LineBasicMaterial({ color: "white" });
 
-// Criar as linhas
+
 edges.forEach(([start, end]) => {
   const geometry = new THREE.BufferGeometry().setFromPoints([
     vertices[start],
@@ -48,45 +49,44 @@ edges.forEach(([start, end]) => {
 });
 
 
-// Eixos de referência
 
 //scene.add(new THREE.AxesHelper(2));
 
-function createAxisLabel(text: string, position: THREE.Vector3): THREE.Sprite {
+const createAxisLabel = (text: string,color: string, position: THREE.Vector3) => {
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d')!;
   canvas.width = 256;
   canvas.height = 256;
 
-  context.fillStyle = 'blue';
+  context.fillStyle = color;
   context.font = '48px Arial';
-  context.textAlign = 'center';
-  context.textBaseline = 'middle';
+  //context.textAlign = 'center';
+  //context.textBaseline = 'middle';
   context.fillText(text, canvas.width / 2, canvas.height / 2);
 
   const texture = new THREE.CanvasTexture(canvas);
   const material = new THREE.SpriteMaterial({ map: texture, transparent: true });
   const sprite = new THREE.Sprite(material);
-  sprite.scale.set(0.5, 0.5, 1); // tamanho do texto
+  sprite.scale.set(0.5, 0.5, 1);
   sprite.position.copy(position);
 
   return sprite;
 }
 
-// Adiciona os rótulos nas pontas dos eixos
-scene.add(createAxisLabel('X', new THREE.Vector3(2, 0, 0)));
-scene.add(createAxisLabel('Y', new THREE.Vector3(0, 2, 0)));
-scene.add(createAxisLabel('Z', new THREE.Vector3(0, 0, 2)));
+scene.add(createAxisLabel('X', 'blue', new THREE.Vector3(2, 0, 0)));
+scene.add(createAxisLabel('Y', 'green', new THREE.Vector3(0, 2, 0)));
+scene.add(createAxisLabel('Z', 'red', new THREE.Vector3(0, 0, 2)));
 
-// Animação
+
 function animate() {
   requestAnimationFrame(animate);
   controls.update();
   renderer.render(scene, camera);
 }
+
 animate();
 
-// Ajustar ao redimensionar a tela
+
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
