@@ -3,7 +3,7 @@
     Este é um projecto entregue como um dos trabalhos da cadeira de Computação Gráfica, que servirá de nota para o mesmo.
 
 ### A primeira parte do projecto encontra-se na Branch main
-### A segunda parte do projecto encontra-se na Branch task2
+### A segunda parte do projecto encontra-se na Branch task2 
 
 
 ## Instalação
