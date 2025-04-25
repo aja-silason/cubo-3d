@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
-// Cena e câmera
 const scene = new THREE.Scene();
 
 scene.background = new THREE.Color(0x000000);
@@ -49,8 +48,30 @@ edges.forEach(([start, end]) => {
 });
 
 
+function createGradientTexture(): THREE.Texture {
+  const canvas = document.createElement('canvas');
+  canvas.width = 256;
+  canvas.height = 256;
+  const ctx = canvas.getContext('2d')!;
 
-//scene.add(new THREE.AxesHelper(2));
+  const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+  gradient.addColorStop(0, 'cyan');
+  gradient.addColorStop(0.5, 'yellow');
+  gradient.addColorStop(1, 'green');
+
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  const texture = new THREE.CanvasTexture(canvas);
+  return texture;
+}
+
+const gradientTexture = createGradientTexture();
+const gradientMaterial = new THREE.MeshBasicMaterial({ map: gradientTexture });
+
+const cubeGeometry = new THREE.BoxGeometry(2, 2, 2);
+const gradientCube = new THREE.Mesh(cubeGeometry, gradientMaterial);
+scene.add(gradientCube);
 
 const createAxisLabel = (text: string,color: string, position: THREE.Vector3) => {
   const canvas = document.createElement('canvas');
@@ -60,8 +81,8 @@ const createAxisLabel = (text: string,color: string, position: THREE.Vector3) =>
 
   context.fillStyle = color;
   context.font = '48px Arial';
-  //context.textAlign = 'center';
-  //context.textBaseline = 'middle';
+  context.textAlign = 'center';
+  context.textBaseline = 'middle';
   context.fillText(text, canvas.width / 2, canvas.height / 2);
 
   const texture = new THREE.CanvasTexture(canvas);
